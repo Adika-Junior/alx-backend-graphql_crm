@@ -3,6 +3,7 @@
 # Navigate to the project directory
 cd /home/j_view/Projects/alx-backend-graphql_crm
 
+one_year_ago = timezone.now() - timedelta(days=365)
 # Use Django's shell to execute Python logic
 python3 manage.py shell <<EOF
 from django.utils import timezone
@@ -19,4 +20,5 @@ inactive_customers.delete()
 with open('/tmp/customer_cleanup_log.txt', 'a') as f:
     timestamp = timezone.now().strftime('%Y-%m-%d %H:%M:%S')
     f.write(f"{timestamp} - Deleted {count} inactive customers\n")
+print(f"Deleted {count} inactive customers")
 EOF

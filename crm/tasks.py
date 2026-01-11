@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+import requests
+>>>>>>> 95028cf (crons: scheduling and automating tasks)
+import requests
 from celery import shared_task
 from datetime import datetime
 from django.db.models import Sum
