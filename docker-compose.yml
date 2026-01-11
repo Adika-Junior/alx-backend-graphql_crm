@@ -1,0 +1,56 @@
+version: '3.8'
+
+# Independent deployment for alx-backend-graphql_crm
+# This allows this service to be deployed independently
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: graphql-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-graphql_db}
+      POSTGRES_USER: ${POSTGRES_USER:-graphql_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-graphql_pass}
+    ports:
+      - "${DB_PORT:-5433}:5432"
+    volumes:
+      - graphql-db-data:/var/lib/postgresql/data
+    networks:
+      - graphql-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-graphql_user}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # GraphQL Service
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: graphql-service
+    command: python manage.py runserver 0.0.0.0:8002
+    volumes:
+      - .:/app
+    ports:
+      - "${PORT:-8002}:8002"
+    environment:
+      - SECRET_KEY=${SECRET_KEY:-django-insecure-change-this}
+      - DEBUG=${DEBUG:-True}
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-graphql_user}:${POSTGRES_PASSWORD:-graphql_pass}@db:5432/${POSTGRES_DB:-graphql_db}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - graphql-network
+
+networks:
+  graphql-network:
+    driver: bridge
+    # Use external network if deploying with other services
+    # external: true
+    # name: alx-network
+
+volumes:
+  graphql-db-data:

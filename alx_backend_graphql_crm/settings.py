@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-=dp7r*x#bm0zsv3ok%(i!5_g5n^6!k9ag&v+7c&p+(0y85xmr^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']  # For PythonAnywhere deployment
 
 
 # Application definition
@@ -120,6 +120,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # GraphQL Configuration
 GRAPHENE = {

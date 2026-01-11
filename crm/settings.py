@@ -9,6 +9,7 @@ CELERY_BEAT_SCHEDULE = {
 
 INSTALLED_APPS = [
     'django_crontab',
+    'django_celery_beat',
 ]
 
 CRONJOBS = [
